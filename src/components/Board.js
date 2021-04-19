@@ -1,40 +1,34 @@
 import styled from "styled-components";
 
-/*const BoardWrapper = styled.div`
-  background: tan;
+const BoardWrapper = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-flow: column;
   height: 100%;
+  background: #DDAF6F;
 `;
 
 const Header = styled.h2`
-  color: white;
-  padding: 15px 80px;
-`;*/
-
-const ListsContainer = styled.div`
-  flex-direction: row;
-  padding: 0 15px 15px;
-  height: 100%;
+  margin: 0;
+  padding: 15px;
 `;
 
-
-/*  <BoardWrapper>
-            {/!* Header *!/}
-            <Header>
-                {name}
-            </Header>
-
-
-        </BoardWrapper>*/
-/* {/* Lists */
+const ListsContainer = styled.div`
+  flex: 1;
+  display: inline-flex;
+  padding: 0 15px 15px;
+`;
 
 const Board = ({name, children}) => {
     return (
-    <ListsContainer>
-        {children}
-    </ListsContainer>
-)
+        <BoardWrapper>
+            <Header>
+                {name}
+            </Header>
+            <ListsContainer>
+                {children}
+            </ListsContainer>
+        </BoardWrapper>
+    )
 }
 
 export default Board;
