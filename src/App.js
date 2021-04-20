@@ -8,28 +8,7 @@ function App() {
         <div className="App">
             <Board name="Hello World">
                 <List name="Todo">
-                    <Card text="First Todo"/>
-                    <Card text="Second Todo"/>
-                    <Card text="Third Todo"/>
-                    <Card text="First Todo"/>
-                    <Card text="Second Todo"/>
-                    <Card text="Third Todo"/>
-                    <Card text="First Todo"/>
-                    <Card text="Second Todo"/>
-                    <Card text="Third Todo"/>
-                    <Card text="First Todo"/>
-                    <Card text="Second Todo"/>
-                    <Card text="Third Todo"/>
-                    <Card text="First Todo"/>
-                    <Card text="Second Todo"/>
-                    <Card text="Third Todo"/>
-                    <Card text="First Todo"/>
-                    <Card text="Second Todo"/>
-                    <Card text="Third Todo"/>
-
-
-                </List>
-                <List name="Test">
+                    <Card/>
                 </List>
             </Board>
         </div>

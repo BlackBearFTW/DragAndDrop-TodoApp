@@ -4,12 +4,13 @@ const BoardWrapper = styled.div`
   display: flex;
   flex-flow: column;
   height: 100%;
-  background: #DDAF6F;
+  background: #ddaf6f;
 `;
 
-const Header = styled.h2`
+const Header = styled.h2`  
   margin: 0;
   padding: 15px;
+  color: white;
 `;
 
 const ListsContainer = styled.div`
