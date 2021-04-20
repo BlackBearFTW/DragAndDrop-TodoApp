@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import {ReactNode} from "react";
 
 const BoardWrapper = styled.div`
   display: flex;
@@ -19,7 +20,7 @@ const ListsContainer = styled.div`
   padding: 0 15px 15px;
 `;
 
-const Board = ({name, children}) => {
+const Board = ({name, children}: {name: string, children: ReactNode}) => {
     return (
         <BoardWrapper>
             <Header>

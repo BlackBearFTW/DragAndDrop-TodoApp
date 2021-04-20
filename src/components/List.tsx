@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import {ReactNode} from "react";
 
 const ListStyle = styled.div`
   width: 280px;
@@ -54,7 +55,7 @@ const Button = styled.button`
   padding: 15px;
 `;
 
-const List = ({name, children}) => {
+const List = ({name, children}: {name: string, children: ReactNode}) => {
     return (
         <ListStyle>
             <Header>{name}</Header>

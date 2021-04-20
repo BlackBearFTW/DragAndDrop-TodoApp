@@ -35,20 +35,20 @@ const TextArea = styled.textarea`
 const Card = ({text = ""}) => {
     const [toggle, setToggle] = useState(true)
     const [cardText, setCardText] = useState(text);
-    const textAreaRef = useRef();
+    const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
     useEffect(() => {
       if (toggle) return;
-        changeTextAreaHeight(textAreaRef.current);
+        changeTextAreaHeight();
     }, [toggle]);
 
     const changeTextAreaHeight = () => {
-        const target = textAreaRef.current;
+        const target = textAreaRef.current!;
 
         if (target?.value === "") return;
 
         target.style.height = 'auto';
-        target.style.height = target.scrollHeight + 'px';
+        target.style.height = target?.scrollHeight + 'px';
 
     }
 
@@ -58,7 +58,7 @@ const Card = ({text = ""}) => {
                 <>{cardText}</> :
                 (<TextArea value={cardText} ref={textAreaRef}
                            onChange={() => {
-                               setCardText(textAreaRef.current.value);
+                               setCardText(textAreaRef.current!.value);
                                changeTextAreaHeight();
                            }}
 
