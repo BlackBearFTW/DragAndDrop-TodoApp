@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {useState} from "react";
+import {useState, useEffect, useRef} from "react";
 
 const CardWrapper = styled.div`
   background: white;
@@ -14,14 +14,17 @@ const CardWrapper = styled.div`
 `;
 
 const TextArea = styled.textarea`
-  resize: none;
   border: none;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   width: 100%;
-  height: 100%;
   min-height: 15px;
+
+  display: block;
+  overflow: hidden;
+  resize: none;
+  
   
   &:focus {
     outline: 0;
@@ -29,37 +32,44 @@ const TextArea = styled.textarea`
 `;
 
 
-const Card = () => {
+const Card = ({text = ""}) => {
     const [toggle, setToggle] = useState(true)
-    const [cardText, setCardText] = useState('test')
+    const [cardText, setCardText] = useState(text);
+    const textAreaRef = useRef();
 
-    const stopEdit = () => {
-        setToggle(true)
-    }
+    useEffect(() => {
+      if (toggle) return;
+        changeTextAreaHeight(textAreaRef.current);
+    }, [toggle]);
 
-    const changeTextAreaHeight = (target) => {
-        if (target.value === "") return;
-        console.log(target.value.split("\n").length);
-        console.log(target.value.split(/\r?\n|\r/).length);
+    const changeTextAreaHeight = () => {
+        const target = textAreaRef.current;
+
+        if (target?.value === "") return;
+
+        target.style.height = 'auto';
+        target.style.height = target.scrollHeight + 'px';
+
     }
 
     return (
         <CardWrapper onDoubleClick={() => setToggle(false)}>
             {(toggle) ?
                 <>{cardText}</> :
-                (<TextArea value={cardText} rows="5"
-                           onChange={(event) => {
-                               setCardText(event.target.value);
-                               changeTextAreaHeight(event.target);
+                (<TextArea value={cardText} ref={textAreaRef}
+                           onChange={() => {
+                               setCardText(textAreaRef.current.value);
+                               changeTextAreaHeight();
                            }}
+
                            onKeyDown={(event) => {
                                if ((event.key === 'Enter' && !event.shiftKey) || event.key === 'Escape') {
-                                   stopEdit();
+                                   setToggle(true);
                                }
                            }}
 
-                           onBlur={(event) => {
-                            stopEdit();
+                           onBlur={() => {
+                               setToggle(true);
                            }}
                     />
                 )}
