@@ -2,32 +2,58 @@ import './App.css';
 import Board from "./components/Board";
 import List from "./components/List";
 import Card from "./components/Card";
+import {useEffect, useState} from "react";
+
+interface ICard {
+    value: string;
+    completed: boolean;
+}
+
+interface IList {
+    name: string,
+    order: number;
+    cards: ICard[]
+}
+
+interface IBoard {
+    name: string,
+    lists: IList[]
+}
+
 
 function App() {
+    const [boardData, setBoardData] = useState<IBoard | null>(null);
 
-    const data = {
-        name: "Board Name",
-        lists: [
-            {
-                name: "List Name",
-                order: 1,
-                cards: ["TEXT HERE"]
-            }
-        ]
+    useEffect(() => {
+        const data: IBoard = {
+            name: "Board name",
+            lists: [{
+                name: "Todo",
+                order: 0,
+                cards: []
+            }]
+        };
+
+        setBoardData(data);
+    }, [])
+
+
+    const updateCard = (identifier: any, value: string) => {
+
     }
 
 
     return (
         <div className="App">
-            <Board name={data.name}>
+            <Board name={boardData!.name}>
 
-                {data.lists.map((list) => (
+                {boardData!.lists.map((list) => (
                     // Generate List
                     <List name={list.name}>
 
                         {list.cards.map(card => (
                             // Generate Card
-                            <Card text={card}/>
+                            <Card text={card.value} onUpdate={updateCard}/>
                         ))}
 
                     </List>

@@ -32,7 +32,7 @@ const TextArea = styled.textarea`
 `;
 
 
-const Card = ({text = ""}) => {
+const Card = ({text = "", onUpdate}: {text: string, onUpdate: Function}) => {
     const [toggle, setToggle] = useState(true)
     const [cardText, setCardText] = useState(text);
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
