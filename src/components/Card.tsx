@@ -32,7 +32,7 @@ const TextArea = styled.textarea`
 `;
 
 
-const Card = ({text = "", onUpdate}: {text: string, onUpdate: Function}) => {
+const Card = ({id, list, text = "", onUpdate}: {id: string, list: string, text: string, onUpdate: Function}) => {
     const [toggle, setToggle] = useState(true)
     const [cardText, setCardText] = useState(text);
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -58,18 +58,20 @@ const Card = ({text = "", onUpdate}: {text: string, onUpdate: Function}) => {
                 <>{cardText}</> :
                 (<TextArea value={cardText} ref={textAreaRef}
                            onChange={() => {
-                               setCardText(textAreaRef.current!.value);
                                changeTextAreaHeight();
+                               setCardText(textAreaRef.current!.value)
                            }}
 
                            onKeyDown={(event) => {
                                if ((event.key === 'Enter' && !event.shiftKey) || event.key === 'Escape') {
                                    setToggle(true);
+                                   onUpdate(id, list, cardText);
                                }
                            }}
 
                            onBlur={() => {
                                setToggle(true);
+                               onUpdate(id, list, cardText);
                            }}
                     />
                 )}

@@ -55,14 +55,14 @@ const Button = styled.button`
   padding: 15px;
 `;
 
-const List = ({name, children}: {name: string, children: ReactNode}) => {
+const List = ({id, name,  children, addCard}: {id: string, name: string, children: ReactNode, addCard: Function}) => {
     return (
         <ListStyle>
             <Header>{name}</Header>
             <CardWrapper>
                 {children}
             </CardWrapper>
-            <Button>Add Card +</Button>
+            <Button onClick={()=> addCard(id)}>Add Card +</Button>
         </ListStyle>
     )
 }
