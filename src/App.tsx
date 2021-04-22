@@ -24,7 +24,7 @@ interface ICard {
 
 
 function App() {
-    const [boardData, setBoardData] = useState<IBoard | null>({
+    const [boardData, setBoardData] = useState<IBoard>({
             name: "Board name",
             lists: [{
                 id: uuid(),
@@ -33,30 +33,43 @@ function App() {
             }]
         });
 
-
-    const updateCard = (cardID: string, listID: string, value: string) => {
-        let state = boardData;
-        const list = state?.lists.find(x => x.id === listID);
-        const card = list?.cards.find(x => x.id === cardID);
-        card!.value = value;
-
-        setBoardData(state);
+    const deepCopyObject = <T, >(object: T): T => {
+        return JSON.parse(JSON.stringify(object))
     }
 
-    const addCard = (listID: string) => {
-        let state = boardData;
-        const list = state?.lists.find(x => x.id === listID);
 
-        list!.cards = [...list!.cards, {
-            id: uuid(),
-            value: "",
-            completed: false
-        }]
+    const handleCard = (action: "add" | "update" | "delete", listID: string, cardID?: string, value?: string) => {
+        setBoardData(state => {
+            const newState = deepCopyObject<IBoard>(state);
+            const list = newState?.lists.find(x => x.id === listID);
 
-        setBoardData(state);
+            if (action === "add") {
 
-        console.log(boardData);
+                list!.cards = [...list!.cards, {
+                    id: uuid(),
+                    value: "",
+                    completed: false
+                }];
+            }
+            else if (action === "update") {
+                if (!cardID || !value) return newState;
+
+                const card = list?.cards.find(x => x.id === cardID);
+                card!.value = value!;
+            }
+            else if (action === "delete") {
+                if (!cardID) return newState;
+
+                list!.cards = list!.cards.filter(card => {
+                    return card.id !== cardID;
+                });
+            }
+
+            return newState;
+        });
     }
+
+
 
 
     return (
@@ -65,11 +78,11 @@ function App() {
 
                 {boardData!.lists.map((list) => (
                     // Generate List
-                    <List id={list.id} key={list.id} name={list.name} addCard={addCard}>
+                    <List id={list.id} key={list.id} name={list.name} addCard={handleCard}>
 
                         {list.cards.map(card => (
                             // Generate Card
-                            <Card id={card.id} key={card.id} list={list.id} text={card.value} onUpdate={updateCard}/>
+                            <Card id={card.id} key={card.id} list={list.id} text={card.value} handle={handleCard}/>
                         ))}
 
                     </List>

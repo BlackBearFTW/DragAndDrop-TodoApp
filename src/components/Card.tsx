@@ -32,13 +32,13 @@ const TextArea = styled.textarea`
 `;
 
 
-const Card = ({id, list, text = "", onUpdate}: {id: string, list: string, text: string, onUpdate: Function}) => {
+const Card = ({id, list, text = "", handle}: {id: string, list: string, text: string, handle: Function}) => {
     const [toggle, setToggle] = useState(true)
     const [cardText, setCardText] = useState(text);
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
     useEffect(() => {
-      if (toggle) return;
+      if (!toggle) return;
         changeTextAreaHeight();
     }, [toggle]);
 
@@ -52,29 +52,33 @@ const Card = ({id, list, text = "", onUpdate}: {id: string, list: string, text: 
 
     }
 
+    const handleCompletion = (event: any) => {
+        if (event.target.value.trim() === "") return handle("delete", list, id);
+
+        setToggle(false);
+        handle("update", list, id, cardText);
+    }
+
     return (
-        <CardWrapper onDoubleClick={() => setToggle(false)}>
+        <CardWrapper onDoubleClick={() => setToggle(true)}>
             {(toggle) ?
-                <>{cardText}</> :
-                (<TextArea value={cardText} ref={textAreaRef}
+                (<TextArea autoFocus value={cardText} ref={textAreaRef}
                            onChange={() => {
                                changeTextAreaHeight();
                                setCardText(textAreaRef.current!.value)
                            }}
 
                            onKeyDown={(event) => {
-                               if ((event.key === 'Enter' && !event.shiftKey) || event.key === 'Escape') {
-                                   setToggle(true);
-                                   onUpdate(id, list, cardText);
+                               if (event.key === 'Enter' || event.key === 'Escape') {
+                                   handleCompletion(event);
                                }
                            }}
 
-                           onBlur={() => {
-                               setToggle(true);
-                               onUpdate(id, list, cardText);
+                           onBlur={(event) => {
+                               handleCompletion(event);
                            }}
                     />
-                )}
+                ):  <>{cardText}</> }
         </CardWrapper>
     )
 }
