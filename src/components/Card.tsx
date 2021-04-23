@@ -32,9 +32,8 @@ const TextArea = styled.textarea`
 `;
 
 
-const Card = ({id, list, text = "", handle}: {id: string, list: string, text: string, handle: Function}) => {
+const Card = ({id, list, text, handle}: {id: string, list: string, text: string, handle: Function}) => {
     const [toggle, setToggle] = useState(true)
-    const [cardText, setCardText] = useState(text);
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
     useEffect(() => {
@@ -52,33 +51,34 @@ const Card = ({id, list, text = "", handle}: {id: string, list: string, text: st
 
     }
 
-    const handleCompletion = (event: any) => {
-        if (event.target.value.trim() === "") return handle("delete", list, id);
+    const handleCompletion = () => {
+        if (textAreaRef.current!.value.trim() === "") return handle("delete", list, id);
 
         setToggle(false);
-        handle("update", list, id, cardText);
+
+        // calls handleCard in App.tsx
+        handle("update", list, id, textAreaRef.current!.value);
     }
 
     return (
         <CardWrapper onDoubleClick={() => setToggle(true)}>
             {(toggle) ?
-                (<TextArea autoFocus value={cardText} ref={textAreaRef}
+                (<TextArea autoFocus ref={textAreaRef} defaultValue={text}
                            onChange={() => {
                                changeTextAreaHeight();
-                               setCardText(textAreaRef.current!.value)
                            }}
 
                            onKeyDown={(event) => {
                                if (event.key === 'Enter' || event.key === 'Escape') {
-                                   handleCompletion(event);
+                                   handleCompletion();
                                }
                            }}
 
-                           onBlur={(event) => {
-                               handleCompletion(event);
+                           onBlur={() => {
+                               handleCompletion();
                            }}
                     />
-                ):  <>{cardText}</> }
+                ):  <>{text}</> }
         </CardWrapper>
     )
 }
