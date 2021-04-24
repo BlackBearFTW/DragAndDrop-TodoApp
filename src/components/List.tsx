@@ -1,8 +1,9 @@
 import styled from "styled-components";
-import {ReactNode} from "react";
+import {ReactNode, useRef, useState} from "react";
 
 const ListStyle = styled.div`
-  width: 280px;
+  min-width: 280px;
+  max-width: 280px;
   background: #ebecf0;
   border-radius: 3px;
 
@@ -46,6 +47,18 @@ const Header = styled.h4`
   margin: 0;
 `;
 
+const HeaderInput = styled.input`
+  margin: 0;
+  padding: 0;
+  font-weight: bold;
+  border: none;
+  background: transparent;
+
+  &:focus {
+    outline: 0;
+  }
+`
+
 const Button = styled.button`
   position: absolute;
   bottom: 0;
@@ -55,14 +68,46 @@ const Button = styled.button`
   padding: 15px;
 `;
 
-const List = ({id, name, children, addCard}: {id: string, name: string, children: ReactNode, addCard: Function}) => {
+const List = ({id, name, children, handleCard, handle}: {id: string, name: string, children: ReactNode, handleCard: Function, handle: Function}) => {
+    const [toggle, setToggle] = useState(true)
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    const handleCompletion = () => {
+        if (inputRef.current!.value.trim() === "") return;
+
+        // calls handleList in App.tsx
+        handle(inputRef.current!.value, id);
+        setToggle(true)
+    }
+
+    const cardDropHandler = (event: any) => {
+       event.preventDefault();
+       const card_info = JSON.parse(event.dataTransfer.getData("card_info"));
+
+
+       handleCard("drag", id, card_info.id, card_info.text, card_info.list_id);
+    }
+
     return (
-        <ListStyle>
-            <Header>{name}</Header>
+        <ListStyle onDragOver={event => event.preventDefault()} onDrop={cardDropHandler}>
+            <Header onDoubleClick={() => setToggle(false)}>
+                {(toggle) ? <>{name}</> :
+                (<HeaderInput type="text" ref={inputRef} defaultValue={name}
+                              onBlur={() => {
+                                  handleCompletion()
+                              }}
+
+                              onKeyDown={(event) => {
+                                  if (event.key === 'Enter' || event.key === 'Escape') {
+                                      handleCompletion();
+                                  }
+                              }}
+                />)}
+            </Header>
             <CardWrapper>
                 {children}
             </CardWrapper>
-            <Button onClick={()=> addCard("add", id)}>Add Card +</Button>
+            <Button onClick={()=> handleCard("add", id)}>Add Card +</Button>
         </ListStyle>
     )
 }
