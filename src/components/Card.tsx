@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import {useEffect, useRef, useState} from "react";
 import {BiTrash} from "react-icons/bi";
+import CardService from "../services/CardService";
 
 const CardWrapper = styled.div`
   background: white;
@@ -54,6 +55,10 @@ const ContentWrapper = styled.div`
 const Card = ({id, list, text, handle}: { id: string, list: string, text: string, handle: Function }) => {
     const [toggle, setToggle] = useState(true)
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
+    const cardService = new CardService();
+
+    cardService.addCard();
 
     useEffect(() => {
         if (!toggle) return;

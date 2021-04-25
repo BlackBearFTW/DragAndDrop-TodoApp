@@ -5,27 +5,12 @@ import Card from "./components/Card";
 import AddList from "./components/AddList";
 import {useEffect, useState} from "react";
 import {v4 as uuid} from 'uuid';
-// import { DragDropContext } from 'react-beautiful-dnd';
-
-interface IBoard {
-    name: string;
-    lists: IList[];
-}
-
-interface IList {
-    id: string;
-    name: string;
-    cards: ICard[];
-}
-
-interface ICard {
-    id: string;
-    value: string;
-    completed: boolean;
-}
-
+import IBoard from "./interfaces/IBoard"
+import ObjectUtil from "./utils/ObjectUtil";
+import CardService from "./services/CardService";
 
 function App() {
+    const cardService = new CardService();
     const [boardData, setBoardData] = useState<IBoard>( {
             name: "Board name",
             lists: [{
@@ -42,17 +27,16 @@ function App() {
         }
     }, [])
 
+    cardService.setState(boardData);
+
+
     useEffect(() => {
         localStorage.setItem("boardData", JSON.stringify(boardData));
     }, [boardData])
 
-    const deepCopyObject = <T, >(object: T): T => {
-        return JSON.parse(JSON.stringify(object))
-    }
-
     const handleBoard = (name: string) => {
         setBoardData(state => {
-            const newState = deepCopyObject<IBoard>(state);
+            const newState: IBoard = ObjectUtil.deepCopy(state);
 
             newState.name = name;
 
@@ -62,7 +46,7 @@ function App() {
 
     const handleList = (name: string, listID: string) => {
         setBoardData(state => {
-            const newState = deepCopyObject<IBoard>(state);
+            const newState: IBoard =  ObjectUtil.deepCopy(state);
             const list = newState?.lists.find(x => x.id === listID);
 
             list!.name = name;
@@ -73,7 +57,7 @@ function App() {
 
     const addList = () => {
         setBoardData(state => {
-            const newState = deepCopyObject<IBoard>(state);
+            const newState: IBoard =  ObjectUtil.deepCopy(state);
 
             newState!.lists = [...newState!.lists, {
                 id: uuid(),
@@ -87,7 +71,7 @@ function App() {
 
     const handleCard = (action: "add" | "update" | "delete" | "drag", listID: string, cardID?: string, value?: string, listID2?: string) => {
         setBoardData(state => {
-            const newState = deepCopyObject<IBoard>(state);
+            const newState: IBoard =  ObjectUtil.deepCopy(state);
             const list = newState?.lists.find(x => x.id === listID);
 
             if (action === "add") {
