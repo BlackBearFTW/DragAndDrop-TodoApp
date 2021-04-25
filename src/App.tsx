@@ -7,10 +7,8 @@ import {useEffect, useState} from "react";
 import {v4 as uuid} from 'uuid';
 import IBoard from "./interfaces/IBoard"
 import ObjectUtil from "./utils/ObjectUtil";
-import CardService from "./services/CardService";
 
 function App() {
-    const cardService = new CardService();
     const [boardData, setBoardData] = useState<IBoard>( {
             name: "Board name",
             lists: [{
@@ -27,7 +25,7 @@ function App() {
         }
     }, [])
 
-    cardService.setState(boardData);
+   // cardService.setState(boardData);
 
 
     useEffect(() => {
@@ -125,7 +123,7 @@ function App() {
 
                         {list.cards.map(card => (
                             // Generate Card
-                            <Card id={card.id} key={card.id} list={list.id} text={card.value} handle={handleCard}/>
+                            <Card id={card.id} key={card.id} list_id={list.id} text={card.value} handle={handleCard}/>
                         ))}
 
                     </List>

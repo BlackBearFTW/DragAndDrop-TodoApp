@@ -52,7 +52,7 @@ const ContentWrapper = styled.div`
 `;
 
 
-const Card = ({id, list, text, handle}: { id: string, list: string, text: string, handle: Function }) => {
+const Card = ({id, list_id, text, handle}: { id: string, list_id: string, text: string, handle: Function }) => {
     const [toggle, setToggle] = useState(true)
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -74,26 +74,26 @@ const Card = ({id, list, text, handle}: { id: string, list: string, text: string
     }
 
     const handleCompletion = () => {
-        if (textAreaRef.current!.value.trim() === "") return handle("delete", list, id);
+        if (textAreaRef.current!.value.trim() === "") return handle("delete", list_id, id);
 
         setToggle(false);
 
         // calls handleCard in App.tsx
-        handle("update", list, id, textAreaRef.current!.value);
+        handle("update", list_id, id, textAreaRef.current!.value);
     }
 
     const handleDragStart = (event: any) => {
         event.dataTransfer.setData("card_info", JSON.stringify({
-            id: id,
-            list_id: list,
-            text: text
+            id,
+            list_id,
+            text
         }));
 
 
     }
 
     const handleDrop = () => {
-        handle("delete", list, id);
+        handle("delete", list_id, id);
     }
 
     return (
@@ -116,7 +116,7 @@ const Card = ({id, list, text, handle}: { id: string, list: string, text: string
                     />
                 ) : <ContentWrapper>
                     <div>{text}</div>
-                    <div onClick={() => handle("delete", list, id)}><BiTrash/></div>
+                    <div onClick={() => handle("delete", list_id, id)}><BiTrash/></div>
             </ContentWrapper>}
         </CardWrapper>
     )
