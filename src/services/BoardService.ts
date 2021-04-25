@@ -5,8 +5,8 @@ import ObjectUtil from "../utils/ObjectUtil";
 class BoardService {
     private readonly stateFunction: any;
 
-    public constructor(stateFunction: any) {
-        this.stateFunction = stateFunction()
+    public constructor(fn: any) {
+        this.stateFunction = fn;
     }
 
     public changeName(name: string) {

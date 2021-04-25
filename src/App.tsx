@@ -10,6 +10,14 @@ import CardService from "./services/CardService";
 import BoardService from "./services/BoardService";
 import ListService from "./services/ListService";
 
+// const boardService = new BoardService();
+// const listService = new ListService();
+// const cardService = new CardService();
+
+let boardService: BoardService;
+let listService: ListService;
+let cardService: CardService;
+
 function App() {
     const [boardData, setBoardData] = useState<IBoard>( {
             name: "Board name",
@@ -20,9 +28,13 @@ function App() {
             }]
         });
 
-    const boardService = new BoardService(setBoardData);
-    const listService = new ListService(setBoardData);
-    const cardService = new CardService(setBoardData);
+    useEffect(() => {
+        boardService = new BoardService(setBoardData);
+        listService = new ListService(setBoardData);
+        cardService = new CardService(setBoardData);
+    }, []);
+
+
 
     useEffect(() => {
         const data = localStorage.getItem("boardData");

@@ -7,14 +7,14 @@ import {v4 as uuid} from "uuid";
 class ListService {
     private readonly stateFunction: any;
 
-    public constructor(stateFunction: any) {
-        this.stateFunction = stateFunction()
+    public constructor(fn: any) {
+        this.stateFunction = fn;
     }
 
     public addList(listObj?: IList) {
         this.stateFunction((state: any) => {
             const newState = ObjectUtil.deepCopy(state);
-
+            
             newState!.lists = [...newState!.lists, {
                 id: (listObj?.id) ? listObj.id : uuid(),
                 name: (listObj?.name) ? listObj.name : "List name",

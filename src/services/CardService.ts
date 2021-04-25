@@ -5,10 +5,11 @@ import {v4 as uuid} from "uuid";
 
 @Singleton
 class CardService {
+
     private readonly stateFunction: any;
 
-    public constructor(stateFunction: any) {
-        this.stateFunction = stateFunction()
+    public constructor(fn: any) {
+        this.stateFunction = fn;
     }
 
     public addCard(listID: string, cardObj?: ICard) {
