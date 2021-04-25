@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import {ReactNode, useRef, useState} from "react";
+import BoardService from "../services/BoardService";
 
 const BoardWrapper = styled.div`
   display: flex;
@@ -34,7 +35,7 @@ const ListsContainer = styled.div`
   overflow-x: auto;
 `;
 
-const Board = ({name, handle, children}: { name: string, handle: Function, children: ReactNode }) => {
+const Board = ({name, boardService, children}: { name: string, boardService: BoardService, children: ReactNode }) => {
     const [toggle, setToggle] = useState(true)
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -42,7 +43,7 @@ const Board = ({name, handle, children}: { name: string, handle: Function, child
         if (inputRef.current!.value.trim() === "") return;
 
         // calls handleBoard in App.tsx
-        handle(inputRef.current!.value);
+        boardService.changeName(inputRef.current!.value);
         setToggle(true)
     }
 

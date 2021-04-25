@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import {ReactNode, useRef, useState} from "react";
+import ListService from "../services/ListService";
+import CardService from "../services/CardService";
 
 const ListStyle = styled.div`
   min-width: 280px;
@@ -68,24 +70,30 @@ const Button = styled.button`
   padding: 15px;
 `;
 
-const List = ({id, name, children, handleCard, handle}: {id: string, name: string, children: ReactNode, handleCard: Function, handle: Function}) => {
+const List = ({id, name, children, cardService, listService}: {id: string, name: string, children: ReactNode, cardService: CardService, listService: ListService}) => {
     const [toggle, setToggle] = useState(true)
     const inputRef = useRef<HTMLInputElement>(null);
 
     const handleCompletion = () => {
         if (inputRef.current!.value.trim() === "") return;
 
-        // calls handleList in App.tsx
-        handle(inputRef.current!.value, id);
-        setToggle(true)
+        // calls updateList in ListService.tsx
+       listService.updateList({
+           id,
+           name: inputRef.current!.value,
+           cards: []
+       });
+
+        setToggle(true);
     }
 
     const cardDropHandler = (event: any) => {
        event.preventDefault();
-       const card_info = JSON.parse(event.dataTransfer.getData("card_info"));
+      // const card_info = JSON.parse(event.dataTransfer.getData("card_info"));
 
+        throw new Error("Function not implemented.");
 
-       handleCard("drag", id, card_info.id, card_info.text, card_info.list_id);
+       //handleCard("drag", id, card_info.id, card_info.text, card_info.list_id);
     }
 
     return (
@@ -107,7 +115,7 @@ const List = ({id, name, children, handleCard, handle}: {id: string, name: strin
             <CardWrapper>
                 {children}
             </CardWrapper>
-            <Button onClick={()=> handleCard("add", id)}>Add Card +</Button>
+            <Button onClick={()=> cardService.addCard(id)}>Add Card +</Button>
         </ListStyle>
     )
 }

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import ListService from "../services/ListService";
 
 const Button = styled.button`
   width: 280px;
@@ -15,10 +16,10 @@ const ButtonWrapper = styled.div`
 `
 
 
-function AddList({handle}: {handle: Function}) {
+function AddList({listService}: {listService: ListService}) {
     return (
        <ButtonWrapper>
-           <Button onClick={() => handle()}>Add List +</Button>
+           <Button onClick={() => listService.addList()}>Add List +</Button>
        </ButtonWrapper>
     )
 }

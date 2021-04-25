@@ -52,13 +52,9 @@ const ContentWrapper = styled.div`
 `;
 
 
-const Card = ({id, list_id, text, handle}: { id: string, list_id: string, text: string, handle: Function }) => {
+const Card = ({id, list_id, text, cardService}: { id: string, list_id: string, text: string, cardService: CardService }) => {
     const [toggle, setToggle] = useState(true)
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
-
-    const cardService = new CardService();
-
-    cardService.addCard();
 
     useEffect(() => {
         if (!toggle) return;
@@ -74,12 +70,17 @@ const Card = ({id, list_id, text, handle}: { id: string, list_id: string, text: 
     }
 
     const handleCompletion = () => {
-        if (textAreaRef.current!.value.trim() === "") return handle("delete", list_id, id);
+        if (textAreaRef.current!.value.trim() === "") return cardService.deleteCard(list_id, {id, value: text, completed: false});
 
         setToggle(false);
 
         // calls handleCard in App.tsx
-        handle("update", list_id, id, textAreaRef.current!.value);
+
+        cardService.updateCard(list_id, {
+            id,
+            value: textAreaRef.current!.value,
+            completed: false
+        })
     }
 
     const handleDragStart = (event: any) => {
@@ -93,7 +94,7 @@ const Card = ({id, list_id, text, handle}: { id: string, list_id: string, text: 
     }
 
     const handleDrop = () => {
-        handle("delete", list_id, id);
+        throw new Error("Function not implemented");
     }
 
     return (
@@ -116,7 +117,7 @@ const Card = ({id, list_id, text, handle}: { id: string, list_id: string, text: 
                     />
                 ) : <ContentWrapper>
                     <div>{text}</div>
-                    <div onClick={() => handle("delete", list_id, id)}><BiTrash/></div>
+                    <div onClick={() => cardService.deleteCard(list_id, {id, value: "", completed: false})}><BiTrash/></div>
             </ContentWrapper>}
         </CardWrapper>
     )

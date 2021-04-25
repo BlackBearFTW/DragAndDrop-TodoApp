@@ -6,7 +6,9 @@ import AddList from "./components/AddList";
 import {useEffect, useState} from "react";
 import {v4 as uuid} from 'uuid';
 import IBoard from "./interfaces/IBoard"
-import ObjectUtil from "./utils/ObjectUtil";
+import CardService from "./services/CardService";
+import BoardService from "./services/BoardService";
+import ListService from "./services/ListService";
 
 function App() {
     const [boardData, setBoardData] = useState<IBoard>( {
@@ -18,6 +20,10 @@ function App() {
             }]
         });
 
+    const boardService = new BoardService(setBoardData);
+    const listService = new ListService(setBoardData);
+    const cardService = new CardService(setBoardData);
+
     useEffect(() => {
         const data = localStorage.getItem("boardData");
         if (data) {
@@ -25,111 +31,27 @@ function App() {
         }
     }, [])
 
-   // cardService.setState(boardData);
-
-
     useEffect(() => {
         localStorage.setItem("boardData", JSON.stringify(boardData));
     }, [boardData])
 
-    const handleBoard = (name: string) => {
-        setBoardData(state => {
-            const newState: IBoard = ObjectUtil.deepCopy(state);
-
-            newState.name = name;
-
-            return newState;
-        });
-    }
-
-    const handleList = (name: string, listID: string) => {
-        setBoardData(state => {
-            const newState: IBoard =  ObjectUtil.deepCopy(state);
-            const list = newState?.lists.find(x => x.id === listID);
-
-            list!.name = name;
-
-            return newState;
-        });
-    }
-
-    const addList = () => {
-        setBoardData(state => {
-            const newState: IBoard =  ObjectUtil.deepCopy(state);
-
-            newState!.lists = [...newState!.lists, {
-                id: uuid(),
-                name: "List name",
-                cards: []
-            }];
-
-            return newState;
-        });
-    }
-
-    const handleCard = (action: "add" | "update" | "delete" | "drag", listID: string, cardID?: string, value?: string, listID2?: string) => {
-        setBoardData(state => {
-            const newState: IBoard =  ObjectUtil.deepCopy(state);
-            const list = newState?.lists.find(x => x.id === listID);
-
-            if (action === "add") {
-
-                list!.cards = [...list!.cards, {
-                    id: (cardID) ? cardID : uuid(),
-                    value: (value) ? value : "",
-                    completed: false
-                }];
-            }
-            else if (action === "update") {
-                if (!cardID || !value) return newState;
-
-                const card = list?.cards.find(x => x.id === cardID);
-                card!.value = value!;
-            }
-            else if (action === "delete") {
-                if (!cardID) return newState;
-
-                list!.cards = list!.cards.filter(card => {
-                    return card.id !== cardID;
-                });
-            } else if (action === "drag") {
-                if (!cardID || !value || !listID2) return newState;
-
-                if (listID === listID2) return newState;
-
-                const list2 = newState?.lists.find(x => x.id === listID2);
-
-                const card = list2?.cards.find(x => x.id === cardID);
-
-                list!.cards = [...list!.cards, card!];
-
-                list2!.cards = list2!.cards.filter(card => {
-                    return card.id !== cardID;
-                });
-
-            }
-
-            return newState;
-        });
-    }
-
     return (
         <div className="App">
-            <Board name={boardData!.name} handle={handleBoard}>
+            <Board name={boardData!.name} boardService={boardService}>
 
                 {boardData!.lists.map((list) => (
                     // Generate List
-                    <List id={list.id} key={list.id} name={list.name} handleCard={handleCard} handle={handleList}>
+                    <List id={list.id} key={list.id} name={list.name} cardService={cardService} listService={listService}>
 
                         {list.cards.map(card => (
                             // Generate Card
-                            <Card id={card.id} key={card.id} list_id={list.id} text={card.value} handle={handleCard}/>
+                            <Card id={card.id} key={card.id} list_id={list.id} text={card.value} cardService={cardService}/>
                         ))}
 
                     </List>
                 ))}
 
-                <AddList handle={addList} />
+                <AddList listService={listService} />
             </Board>
         </div>
     );
