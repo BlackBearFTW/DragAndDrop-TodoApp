@@ -6,9 +6,11 @@ import {v4 as uuid} from "uuid";
 @Singleton
 class CardService {
 
+    private readonly stateVariable;
     private readonly stateFunction: any;
 
-    public constructor(fn: any) {
+    public constructor(variable: any, fn: any) {
+        this.stateVariable = variable;
         this.stateFunction = fn;
     }
 
@@ -29,7 +31,7 @@ class CardService {
         });
     }
 
-    public updateCard(listID: string, cardObj: ICard) {
+    public updateCard(cardObj: ICard) {
         this.stateFunction((state: any) => {
             const newState = ObjectUtil.deepCopy(state);
             const list = newState?.lists.find((x: any) => x.id === listID);
@@ -46,10 +48,10 @@ class CardService {
         });
     }
 
-    public deleteCard(listID: string, cardObj: ICard) {
+    public deleteCard(cardObj: ICard) {
         this.stateFunction((state: any) => {
             const newState = ObjectUtil.deepCopy(state);
-            const list = newState?.lists.find((x: any) => x.id === listID);
+            const list = newState?.lists.find((x: any) => x.id === cardObj.list_id);
 
             if(!list) return newState;
 
@@ -59,6 +61,10 @@ class CardService {
 
             return newState;
         });
+    }
+
+    public getAllCardsByListId(listID: string) {
+        return this.stateVariable.cards.filter(({list_id}: {list_id: any}) => list_id === listID);
     }
 }
 

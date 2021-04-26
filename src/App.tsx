@@ -9,61 +9,59 @@ import IBoard from "./interfaces/IBoard"
 import CardService from "./services/CardService";
 import BoardService from "./services/BoardService";
 import ListService from "./services/ListService";
-
-// const boardService = new BoardService();
-// const listService = new ListService();
-// const cardService = new CardService();
+import IList from "./interfaces/IList";
+import ICard from "./interfaces/ICard";
 
 let boardService: BoardService;
 let listService: ListService;
 let cardService: CardService;
 
 function App() {
-    const [boardData, setBoardData] = useState<IBoard>( {
-            name: "Board name",
-            lists: [{
-                id: uuid(),
-                name: "Todo list",
-                cards: []
-            }]
-        });
+    const [boardState, setBoardState] = useState<IBoard>({name: "Board name"});
+    const [listsState, setListsState] = useState<IList[]>([]);
+    const [cardsState, setCardsState] = useState<ICard[]>([]);
 
     useEffect(() => {
-        boardService = new BoardService(setBoardData);
-        listService = new ListService(setBoardData);
-        cardService = new CardService(setBoardData);
+        boardService = new BoardService(boardState, setBoardState);
+        listService = new ListService(listsState, setListsState);
+        cardService = new CardService(cardsState, setCardsState);
     }, []);
 
 
-
     useEffect(() => {
-        const data = localStorage.getItem("boardData");
-        if (data) {
-            setBoardData(JSON.parse(data));
-        }
+        const board = localStorage.getItem("boardState");
+        const lists = localStorage.getItem("listsState");
+        const cards = localStorage.getItem("cardsState");
+        if (board) setBoardState(JSON.parse(board));
+        if (lists) setListsState(JSON.parse(lists));
+        if (cards) setCardsState(JSON.parse(cards));
     }, [])
 
     useEffect(() => {
-        localStorage.setItem("boardData", JSON.stringify(boardData));
-    }, [boardData])
+        localStorage.setItem("boardState", JSON.stringify(boardState));
+        localStorage.setItem("listsState", JSON.stringify(listsState));
+        localStorage.setItem("cardsState", JSON.stringify(cardsState));
+    }, [boardState, listsState, cardsState]);
 
     return (
         <div className="App">
-            <Board name={boardData!.name} boardService={boardService}>
+            <Board name={boardState!.name} boardService={boardService}>
 
-                {boardData!.lists.map((list) => (
+                {listsState!.map((list) => (
                     // Generate List
-                    <List id={list.id} key={list.id} name={list.name} cardService={cardService} listService={listService}>
+                    <List key={list.id} data={list} cardService={cardService}
+                          listService={listService}>
 
-                        {list.cards.map(card => (
+                        {cardService.getAllCardsByListId(list.id).map((card: any) => (
                             // Generate Card
-                            <Card id={card.id} key={card.id} list_id={list.id} text={card.value} cardService={cardService}/>
+                            <Card key={card.id} data={card}
+                                  cardService={cardService}/>
                         ))}
 
                     </List>
                 ))}
 
-                <AddList listService={listService} />
+                <AddList listService={listService}/>
             </Board>
         </div>
     );

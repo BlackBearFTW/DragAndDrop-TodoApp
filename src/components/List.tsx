@@ -81,7 +81,6 @@ const List = ({id, name, children, cardService, listService}: {id: string, name:
        listService.updateList({
            id,
            name: inputRef.current!.value,
-           cards: []
        });
 
         setToggle(true);

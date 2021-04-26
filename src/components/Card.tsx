@@ -2,6 +2,7 @@ import styled from "styled-components";
 import {useEffect, useRef, useState} from "react";
 import {BiTrash} from "react-icons/bi";
 import CardService from "../services/CardService";
+import ICard from "../interfaces/ICard";
 
 const CardWrapper = styled.div`
   background: white;
@@ -52,7 +53,7 @@ const ContentWrapper = styled.div`
 `;
 
 
-const Card = ({id, list_id, text, cardService}: { id: string, list_id: string, text: string, cardService: CardService }) => {
+const Card = ({data, cardService}: { data: ICard, cardService: CardService }) => {
     const [toggle, setToggle] = useState(true)
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -70,17 +71,14 @@ const Card = ({id, list_id, text, cardService}: { id: string, list_id: string, t
     }
 
     const handleCompletion = () => {
-        if (textAreaRef.current!.value.trim() === "") return cardService.deleteCard(list_id, {id, value: text, completed: false});
+        if (textAreaRef.current!.value.trim() === "") return cardService.deleteCard(data);
 
         setToggle(false);
 
         // calls handleCard in App.tsx
 
-        cardService.updateCard(list_id, {
-            id,
-            value: textAreaRef.current!.value,
-            completed: false
-        })
+        data.value = textAreaRef.current!.value;
+        cardService.updateCard(data);
     }
 
     const handleDragStart = (event: any) => {
