@@ -50,6 +50,14 @@ class CardService {
         });
     }
 
+    public deleteCardByList(listID: string) {
+        this.stateFunction((state: any) => {
+            return ObjectUtil.deepCopy(state).filter((card: any) => {
+                return card.list_id !== listID;
+            });
+        });
+    }
+
 }
 
 export default CardService;

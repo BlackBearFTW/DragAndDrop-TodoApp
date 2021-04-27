@@ -120,6 +120,11 @@ const List = ({
         }
     }
 
+    const handleDeleteClick = () => {
+        listService.deleteList(data);
+        cardService.deleteCardByList(data.id);
+    }
+
     const cardDropHandler = (event: any) => {
         event.preventDefault();
         throw new Error("Function not implemented.");
@@ -131,11 +136,11 @@ const List = ({
         <ListStyle onDragOver={event => event.preventDefault()} onDrop={cardDropHandler}>
             <Header onDoubleClick={() => setToggle(true)}>
                 {(toggle) ? (<HeaderInput type="text" ref={inputRef} defaultValue={data.name}
-                                  onBlur={handleCompletion}
-                                  onKeyDown={handleKeyDown}/>) :
+                                          onBlur={handleCompletion}
+                                          onKeyDown={handleKeyDown}/>) :
                     <ContentWrapper>
                         <div>{data.name}</div>
-                        <div onClick={() => listService.deleteList(data)}><BiTrash/></div>
+                        <div onClick={handleDeleteClick}><BiTrash/></div>
                     </ContentWrapper>}
             </Header>
             <CardWrapper>
