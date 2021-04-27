@@ -14,35 +14,23 @@ class CardService {
         this.stateFunction = fn;
     }
 
-    public addCard(listID: string, cardObj?: ICard) {
+    public addCard(listID: string) {
         this.stateFunction((state: any) => {
-            const newState = ObjectUtil.deepCopy(state);
-            const list = newState?.lists.find((x: any) => x.id === listID);
-
-            if(!list) return newState;
-
-            list!.cards = [...list!.cards, {
-                id: (cardObj?.id) ? cardObj.id : uuid(),
-                value: (cardObj?.value) ? cardObj.value : "",
+            return [...ObjectUtil.deepCopy(state), {
+                id: uuid(),
+                list_id: listID,
+                value: "",
                 completed: false
-            }];
-
-            return newState;
+            } as ICard];
         });
     }
 
     public updateCard(cardObj: ICard) {
         this.stateFunction((state: any) => {
             const newState = ObjectUtil.deepCopy(state);
-            const list = newState?.lists.find((x: any) => x.id === listID);
 
-            if(!list) return newState;
-
-            const card = list?.cards.find((x: any) => x.id === cardObj.id);
-
-            if (!card) return newState;
-
-            card!.value = cardObj.value;
+            const index = newState.findIndex((card: ICard) => card.id === cardObj.id);
+            newState[index] = cardObj;
 
             return newState;
         });
@@ -50,21 +38,14 @@ class CardService {
 
     public deleteCard(cardObj: ICard) {
         this.stateFunction((state: any) => {
-            const newState = ObjectUtil.deepCopy(state);
-            const list = newState?.lists.find((x: any) => x.id === cardObj.list_id);
-
-            if(!list) return newState;
-
-            list!.cards = list!.cards.filter((card: any) => {
+           return ObjectUtil.deepCopy(state).filter((card: any) => {
                 return card.id !== cardObj.id;
             });
-
-            return newState;
         });
     }
 
     public getAllCardsByListId(listID: string) {
-        return this.stateVariable.cards.filter(({list_id}: {list_id: any}) => list_id === listID);
+        return this.stateVariable.filter(({list_id}: {list_id: any}) => list_id === listID);
     }
 }
 

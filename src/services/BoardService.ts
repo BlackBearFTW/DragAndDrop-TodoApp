@@ -14,9 +14,7 @@ class BoardService {
     public changeName(name: string) {
         this.stateFunction((state: any) => {
             const newState = ObjectUtil.deepCopy(state);
-
             newState.name = name;
-
             return newState;
         });
     }

@@ -4,7 +4,6 @@ import List from "./components/List";
 import Card from "./components/Card";
 import AddList from "./components/AddList";
 import {useEffect, useState} from "react";
-import {v4 as uuid} from 'uuid';
 import IBoard from "./interfaces/IBoard"
 import CardService from "./services/CardService";
 import BoardService from "./services/BoardService";
@@ -25,7 +24,7 @@ function App() {
         boardService = new BoardService(boardState, setBoardState);
         listService = new ListService(listsState, setListsState);
         cardService = new CardService(cardsState, setCardsState);
-    }, []);
+    }, [boardState, cardsState, listsState]);
 
 
     useEffect(() => {
@@ -49,8 +48,7 @@ function App() {
 
                 {listsState!.map((list) => (
                     // Generate List
-                    <List key={list.id} data={list} cardService={cardService}
-                          listService={listService}>
+                    <List key={list.id} data={list} cardService={cardService} listService={listService}>
 
                         {cardService.getAllCardsByListId(list.id).map((card: any) => (
                             // Generate Card

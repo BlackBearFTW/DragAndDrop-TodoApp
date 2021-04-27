@@ -22,9 +22,9 @@ const HeaderInput = styled.input`
   border: none;
   background: transparent;
   font-weight: bold;
-  
+
   &:focus {
-   outline: 0; 
+    outline: 0;
   }
 `;
 
@@ -36,32 +36,29 @@ const ListsContainer = styled.div`
 `;
 
 const Board = ({name, boardService, children}: { name: string, boardService: BoardService, children: ReactNode }) => {
-    const [toggle, setToggle] = useState(true)
+    const [toggle, setToggle] = useState(false)
     const inputRef = useRef<HTMLInputElement>(null);
 
     const handleCompletion = () => {
         if (inputRef.current!.value.trim() === "") return;
-
-        // calls handleBoard in App.tsx
         boardService.changeName(inputRef.current!.value);
-        setToggle(true)
+        setToggle(false)
+    }
+
+    const handleKeyDown = (event: any) => {
+        if (event.key === 'Enter' || event.key === 'Escape') {
+            handleCompletion();
+        }
     }
 
     return (
         <BoardWrapper>
-            <Header onDoubleClick={() => setToggle(false)}>
-                {(toggle) ? <>{name}</> :
-                    (<HeaderInput type="text" ref={inputRef} defaultValue={name}
-                            onBlur={() => {
-                                handleCompletion()
-                            }}
-
-                            onKeyDown={(event) => {
-                                if (event.key === 'Enter' || event.key === 'Escape') {
-                                    handleCompletion();
-                                }
-                            }}
-                    />)}
+            <Header onDoubleClick={() => setToggle(true)}>
+                {(toggle) ? (<HeaderInput type="text" ref={inputRef} defaultValue={name}
+                                          onBlur={handleCompletion}
+                                          onKeyDown={handleKeyDown}/>) :
+                    <>{name}</>
+                }
             </Header>
             <ListsContainer>
                 {children}

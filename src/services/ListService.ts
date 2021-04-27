@@ -15,23 +15,19 @@ class ListService {
 
     public addList() {
         this.stateFunction((state: any) => {
-            const newState = ObjectUtil.deepCopy(state);
-
-            newState!.lists = [...newState.lists, {
+            return [...ObjectUtil.deepCopy(state), {
                 id: uuid(),
                 name: "List name"
-                }]
-
-            return newState;
+                } as IList];
         });
     }
 
     public updateList(listObj: IList) {
         this.stateFunction((state: any) => {
             const newState = ObjectUtil.deepCopy(state);
-            const list = newState?.lists.find((x: any) => x.id === listObj.id);
 
-            list.name = listObj.name;
+            const index = newState.findIndex((list: IList) => list.id === listObj.id);
+            newState[index] = listObj;
 
             return newState;
         });

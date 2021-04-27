@@ -17,6 +17,7 @@ const ButtonWrapper = styled.div`
 
 
 function AddList({listService}: {listService: ListService}) {
+    console.log(listService);
     return (
        <ButtonWrapper>
            <Button onClick={() => listService.addList()}>Add List +</Button>

@@ -54,7 +54,7 @@ const ContentWrapper = styled.div`
 
 
 const Card = ({data, cardService}: { data: ICard, cardService: CardService }) => {
-    const [toggle, setToggle] = useState(true)
+    const [toggle, setToggle] = useState(false)
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
     useEffect(() => {
@@ -74,48 +74,33 @@ const Card = ({data, cardService}: { data: ICard, cardService: CardService }) =>
         if (textAreaRef.current!.value.trim() === "") return cardService.deleteCard(data);
 
         setToggle(false);
-
-        // calls handleCard in App.tsx
-
         data.value = textAreaRef.current!.value;
         cardService.updateCard(data);
     }
 
-    const handleDragStart = (event: any) => {
-        event.dataTransfer.setData("card_info", JSON.stringify({
-            id,
-            list_id,
-            text
-        }));
-
-
-    }
+    const handleDragStart = (event: any) => event.dataTransfer.setData("card_info", JSON.stringify(data));
 
     const handleDrop = () => {
         throw new Error("Function not implemented");
     }
 
+    const handleKeyDown = (event: any) => {
+        if (event.key === 'Enter' || event.key === 'Escape') {
+            handleCompletion();
+        }
+    }
+
     return (
         <CardWrapper onDoubleClick={() => setToggle(true)} onDragOver={event => event.stopPropagation()} draggable={true} onDragStart={handleDragStart} onDrop={handleDrop}>
             {(toggle) ?
-                (<TextArea autoFocus ref={textAreaRef} defaultValue={text}
-                           onChange={() => {
-                               changeTextAreaHeight();
-                           }}
-
-                           onKeyDown={(event) => {
-                               if (event.key === 'Enter' || event.key === 'Escape') {
-                                   handleCompletion();
-                               }
-                           }}
-
-                           onBlur={() => {
-                               handleCompletion();
-                           }}
+                (<TextArea autoFocus ref={textAreaRef} defaultValue={data.value}
+                           onChange={changeTextAreaHeight}
+                           onKeyDown={handleKeyDown}
+                           onBlur={handleCompletion}
                     />
                 ) : <ContentWrapper>
-                    <div>{text}</div>
-                    <div onClick={() => cardService.deleteCard(list_id, {id, value: "", completed: false})}><BiTrash/></div>
+                    <div>{data.value}</div>
+                    <div onClick={() => cardService.deleteCard(data)}><BiTrash/></div>
             </ContentWrapper>}
         </CardWrapper>
     )
