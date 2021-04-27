@@ -50,11 +50,11 @@ function App() {
                     // Generate List
                     <List key={list.id} data={list} cardService={cardService} listService={listService}>
 
-                        {cardService.getAllCardsByListId(list.id).map((card: any) => (
+                        {cardsState.flatMap((card: any) => card.list_id === list.id ? (
                             // Generate Card
                             <Card key={card.id} data={card}
                                   cardService={cardService}/>
-                        ))}
+                        ) : "")}
 
                     </List>
                 ))}

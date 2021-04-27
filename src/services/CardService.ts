@@ -16,12 +16,18 @@ class CardService {
 
     public addCard(listID: string) {
         this.stateFunction((state: any) => {
-            return [...ObjectUtil.deepCopy(state), {
+            const newState = ObjectUtil.deepCopy(state);
+
+            const card: ICard = {
                 id: uuid(),
                 list_id: listID,
                 value: "",
                 completed: false
-            } as ICard];
+            };
+
+            newState.push(card);
+
+            return newState;
         });
     }
 
@@ -44,9 +50,6 @@ class CardService {
         });
     }
 
-    public getAllCardsByListId(listID: string) {
-        return this.stateVariable.filter(({list_id}: {list_id: any}) => list_id === listID);
-    }
 }
 
 export default CardService;

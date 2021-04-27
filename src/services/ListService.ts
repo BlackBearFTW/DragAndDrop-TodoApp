@@ -14,6 +14,7 @@ class ListService {
     }
 
     public addList() {
+
         this.stateFunction((state: any) => {
             return [...ObjectUtil.deepCopy(state), {
                 id: uuid(),
@@ -30,6 +31,14 @@ class ListService {
             newState[index] = listObj;
 
             return newState;
+        });
+    }
+
+    public deleteList(listObj: IList) {
+        this.stateFunction((state: any) => {
+            return ObjectUtil.deepCopy(state).filter((list: any) => {
+                return list.id !== listObj.id;
+            });
         });
     }
 }

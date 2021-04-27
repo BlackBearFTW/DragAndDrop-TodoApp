@@ -3,6 +3,7 @@ import {ReactNode, useRef, useState} from "react";
 import ListService from "../services/ListService";
 import CardService from "../services/CardService";
 import IList from "../interfaces/IList";
+import {BiTrash} from "react-icons/bi";
 
 const ListStyle = styled.div`
   min-width: 280px;
@@ -51,6 +52,12 @@ const CardWrapper = styled.div`
 const Header = styled.h4`
   padding: 10px;
   margin: 0;
+
+  &:hover > * div:last-of-type {
+    color: black;
+    transition: all 500ms;
+    opacity: 1;
+  }
 `;
 
 const HeaderInput = styled.input`
@@ -72,6 +79,21 @@ const Button = styled.button`
   border: none;
   background: lightgray;
   padding: 15px;
+`;
+
+const ContentWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  
+  & > *:last-of-type {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 5px 0 15px;
+    color: #ebecf0;
+    opacity: 0;
+  }
+  
 `;
 
 const List = ({
@@ -111,7 +133,10 @@ const List = ({
                 {(toggle) ? (<HeaderInput type="text" ref={inputRef} defaultValue={data.name}
                                   onBlur={handleCompletion}
                                   onKeyDown={handleKeyDown}/>) :
-                    <>{data.name}</>}
+                    <ContentWrapper>
+                        <div>{data.name}</div>
+                        <div onClick={() => listService.deleteList(data)}><BiTrash/></div>
+                    </ContentWrapper>}
             </Header>
             <CardWrapper>
                 {children}

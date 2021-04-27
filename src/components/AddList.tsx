@@ -6,22 +6,20 @@ const Button = styled.button`
   border: none;
   background: #ebecf0;
   border-radius: 3px;
-  padding: 15px;
   flex: none;
+  align-self: flex-start;
+  padding: 15px;
   
+  * ~ & {
+    margin-left: 15px;
+  }
 `;
 
-const ButtonWrapper = styled.div`
-  margin-left: 15px;
-`
 
 
 function AddList({listService}: {listService: ListService}) {
-    console.log(listService);
     return (
-       <ButtonWrapper>
            <Button onClick={() => listService.addList()}>Add List +</Button>
-       </ButtonWrapper>
     )
 }
 
