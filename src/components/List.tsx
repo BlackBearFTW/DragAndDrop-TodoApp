@@ -4,6 +4,7 @@ import ListService from "../services/ListService";
 import CardService from "../services/CardService";
 import IList from "../interfaces/IList";
 import {BiTrash} from "react-icons/bi";
+import {Droppable} from "react-beautiful-dnd";
 
 const ListStyle = styled.div`
   min-width: 280px;
@@ -84,7 +85,7 @@ const Button = styled.button`
 const ContentWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  
+
   & > *:last-of-type {
     display: flex;
     justify-content: center;
@@ -93,7 +94,7 @@ const ContentWrapper = styled.div`
     color: #ebecf0;
     opacity: 0;
   }
-  
+
 `;
 
 const List = ({
@@ -125,6 +126,7 @@ const List = ({
         cardService.deleteCardByList(data.id);
     }
 
+
     return (
         <ListStyle>
             <Header onDoubleClick={() => setToggle(true)}>
@@ -136,9 +138,14 @@ const List = ({
                         <div onClick={handleDeleteClick}><BiTrash/></div>
                     </ContentWrapper>}
             </Header>
-            <CardWrapper>
-                {children}
-            </CardWrapper>
+            <Droppable droppableId={data.id}>
+                {provided => (
+                    <CardWrapper {...provided.droppableProps} ref={provided.innerRef}>
+                        {children}
+                        {provided.placeholder}
+                    </CardWrapper>
+                )}
+            </Droppable>
             <Button onClick={() => cardService.addCard(data.id)}>Add Card +</Button>
         </ListStyle>
     )

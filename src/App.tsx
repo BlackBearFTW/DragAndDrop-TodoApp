@@ -16,6 +16,7 @@ import Board from "./components/Board";
 import List from "./components/List";
 import Card from "./components/Card";
 import AddList from "./components/AddList";
+import {DragDropContext, DropResult} from "react-beautiful-dnd";
 
 /* Service variables */
 let boardService: BoardService;
@@ -49,22 +50,27 @@ function App() {
         localStorage.setItem("cardsState", JSON.stringify(cardsState));
     }, [boardState, listsState, cardsState]);
 
+    const onDragEnd = (result: DropResult) => {
+
+    }
 
     return (
         <div className="App">
             <Board name={boardState!.name} boardService={boardService}>
+            <DragDropContext onDragEnd={onDragEnd}>
                 {listsState!.map((list) => (
                     // Generate List
                     <List key={list.id} data={list} cardService={cardService} listService={listService}>
 
-                        {cardsState.flatMap((card: any) => card.list_id === list.id ? (
+                        {cardsState.flatMap((card: any, index) => card.list_id === list.id ? (
                             // Generate Card
                             <Card key={card.id} data={card}
-                                  cardService={cardService}/>
+                                  cardService={cardService} index={index}/>
                         ) : "")}
 
                     </List>
                 ))}
+            </DragDropContext>
                 <AddList listService={listService}/>
             </Board>
         </div>

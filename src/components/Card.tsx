@@ -3,6 +3,7 @@ import {useEffect, useRef, useState} from "react";
 import {BiTrash} from "react-icons/bi";
 import CardService from "../services/CardService";
 import ICard from "../interfaces/ICard";
+import {Draggable} from "react-beautiful-dnd";
 
 const CardWrapper = styled.div`
   background: white;
@@ -41,7 +42,7 @@ const TextArea = styled.textarea`
 const ContentWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  
+
   & > *:last-of-type {
     display: flex;
     justify-content: center;
@@ -49,11 +50,11 @@ const ContentWrapper = styled.div`
     padding: 0 5px 0 15px;
     color: white;
   }
-  
+
 `;
 
 
-const Card = ({data, cardService}: { data: ICard, cardService: CardService }) => {
+const Card = ({data, cardService, index}: { data: ICard, cardService: CardService, index: number }) => {
     const [toggle, setToggle] = useState((data.value === ""))
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -85,18 +86,27 @@ const Card = ({data, cardService}: { data: ICard, cardService: CardService }) =>
     }
 
     return (
-        <CardWrapper onDoubleClick={() => setToggle(true)}>
-            {(toggle) ?
-                (<TextArea autoFocus={true} ref={textAreaRef} defaultValue={data.value}
-                           onChange={changeTextAreaHeight}
-                           onKeyDown={handleKeyDown}
-                           onBlur={handleCompletion}
-                    />
-                ) : <ContentWrapper>
-                    <div>{data.value}</div>
-                    <div onClick={() => cardService.deleteCard(data)}><BiTrash/></div>
-            </ContentWrapper>}
-        </CardWrapper>
+        <Draggable draggableId={data.id} index={index}>
+            {provided => (
+                <CardWrapper
+                    onDoubleClick={() => setToggle(true)}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                    ref={provided.innerRef}
+                >
+                    {(toggle) ?
+                        (<TextArea autoFocus={true} ref={textAreaRef} defaultValue={data.value}
+                                   onChange={changeTextAreaHeight}
+                                   onKeyDown={handleKeyDown}
+                                   onBlur={handleCompletion}
+                            />
+                        ) : <ContentWrapper>
+                            <div>{data.value}</div>
+                            <div onClick={() => cardService.deleteCard(data)}><BiTrash/></div>
+                        </ContentWrapper>}
+                </CardWrapper>
+            )}
+        </Draggable>
     )
 }
 
