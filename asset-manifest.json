@@ -1,20 +1,20 @@
 {
   "files": {
     "main.css": "/dnd-todoapp/static/css/main.b82aeb31.chunk.css",
-    "main.js": "/dnd-todoapp/static/js/main.72adfb7e.chunk.js",
-    "main.js.map": "/dnd-todoapp/static/js/main.72adfb7e.chunk.js.map",
+    "main.js": "/dnd-todoapp/static/js/main.27ac8bf7.chunk.js",
+    "main.js.map": "/dnd-todoapp/static/js/main.27ac8bf7.chunk.js.map",
     "runtime-main.js": "/dnd-todoapp/static/js/runtime-main.5b3f675f.js",
     "runtime-main.js.map": "/dnd-todoapp/static/js/runtime-main.5b3f675f.js.map",
-    "static/js/2.8016be86.chunk.js": "/dnd-todoapp/static/js/2.8016be86.chunk.js",
-    "static/js/2.8016be86.chunk.js.map": "/dnd-todoapp/static/js/2.8016be86.chunk.js.map",
+    "static/js/2.14e39f61.chunk.js": "/dnd-todoapp/static/js/2.14e39f61.chunk.js",
+    "static/js/2.14e39f61.chunk.js.map": "/dnd-todoapp/static/js/2.14e39f61.chunk.js.map",
     "index.html": "/dnd-todoapp/index.html",
     "static/css/main.b82aeb31.chunk.css.map": "/dnd-todoapp/static/css/main.b82aeb31.chunk.css.map",
-    "static/js/2.8016be86.chunk.js.LICENSE.txt": "/dnd-todoapp/static/js/2.8016be86.chunk.js.LICENSE.txt"
+    "static/js/2.14e39f61.chunk.js.LICENSE.txt": "/dnd-todoapp/static/js/2.14e39f61.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.5b3f675f.js",
-    "static/js/2.8016be86.chunk.js",
+    "static/js/2.14e39f61.chunk.js",
     "static/css/main.b82aeb31.chunk.css",
-    "static/js/main.72adfb7e.chunk.js"
+    "static/js/main.27ac8bf7.chunk.js"
   ]
 }
