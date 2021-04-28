@@ -44,6 +44,8 @@ const Header = styled.div`
 
 
 const HeaderInput = styled.input`
+  font-family: inherit;
+  font-size: inherit;
   margin: 0;
   padding: 15px;
   color: white;

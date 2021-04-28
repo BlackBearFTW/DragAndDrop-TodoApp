@@ -65,6 +65,8 @@ const Header = styled.h4`
 `;
 
 const HeaderInput = styled.input`
+  font-family: inherit;
+  font-size: inherit;
   margin: 0;
   padding: 0;
   font-weight: bold;

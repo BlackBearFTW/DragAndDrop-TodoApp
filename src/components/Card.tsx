@@ -25,6 +25,8 @@ const CardWrapper = styled.div`
 `;
 
 const TextArea = styled.textarea`
+  font-family: inherit;
+  font-size: inherit;
   border: none;
   margin: 0;
   padding: 0;
