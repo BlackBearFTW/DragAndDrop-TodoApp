@@ -5,12 +5,9 @@ import {v4 as uuid} from "uuid";
 
 @Singleton
 class CardService {
+    private readonly stateFunction: Function;
 
-    private readonly stateVariable;
-    private readonly stateFunction: any;
-
-    public constructor(variable: any, fn: any) {
-        this.stateVariable = variable;
+    public constructor(fn: Function) {
         this.stateFunction = fn;
     }
 
@@ -57,7 +54,6 @@ class CardService {
             });
         });
     }
-
 }
 
 export default CardService;

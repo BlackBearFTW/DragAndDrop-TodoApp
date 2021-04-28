@@ -1,12 +1,13 @@
 import styled from "styled-components";
 import {ReactNode, useRef, useState} from "react";
 import BoardService from "../services/BoardService";
+import {DragDropContext, DropResult} from "react-beautiful-dnd";
 
 const BoardWrapper = styled.div`
   display: flex;
   flex-flow: column;
   height: 100%;
-  background: #ddaf6f;
+  background: #282828;
 `;
 
 const Header = styled.h2`
@@ -51,6 +52,11 @@ const Board = ({name, boardService, children}: { name: string, boardService: Boa
         }
     }
 
+    const onDragEnd = (result: DropResult) => {
+
+    }
+
+
     return (
         <BoardWrapper>
             <Header onDoubleClick={() => setToggle(true)}>
@@ -61,7 +67,9 @@ const Board = ({name, boardService, children}: { name: string, boardService: Boa
                 }
             </Header>
             <ListsContainer>
+                <DragDropContext onDragEnd={onDragEnd}>
                 {children}
+                </DragDropContext>
             </ListsContainer>
         </BoardWrapper>
     )

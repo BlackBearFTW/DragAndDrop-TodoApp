@@ -125,15 +125,8 @@ const List = ({
         cardService.deleteCardByList(data.id);
     }
 
-    const cardDropHandler = (event: any) => {
-        event.preventDefault();
-        throw new Error("Function not implemented.");
-        // const card_info = JSON.parse(event.dataTransfer.getData("card_info"));
-        //handleCard("drag", id, card_info.id, card_info.text, card_info.list_id);
-    }
-
     return (
-        <ListStyle onDragOver={event => event.preventDefault()} onDrop={cardDropHandler}>
+        <ListStyle>
             <Header onDoubleClick={() => setToggle(true)}>
                 {(toggle) ? (<HeaderInput type="text" ref={inputRef} defaultValue={data.name}
                                           onBlur={handleCompletion}

@@ -5,16 +5,13 @@ import {v4 as uuid} from "uuid";
 
 @Singleton
 class ListService {
-    private readonly stateVariable: any;
-    private readonly stateFunction: any;
+    private readonly stateFunction: Function;
 
-    public constructor(variable: any, fn: any) {
-        this.stateVariable = variable;
+    public constructor(fn: Function) {
         this.stateFunction = fn;
     }
 
     public addList() {
-
         this.stateFunction((state: any) => {
             return [...ObjectUtil.deepCopy(state), {
                 id: uuid(),

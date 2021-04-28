@@ -3,11 +3,9 @@ import ObjectUtil from "../utils/ObjectUtil";
 
 @Singleton
 class BoardService {
-    private readonly stateVariable: any;
-    private readonly stateFunction: any;
+    private readonly stateFunction:  Function;
 
-    public constructor(variable: any, fn: any) {
-        this.stateVariable = variable;
+    public constructor(fn: Function) {
         this.stateFunction = fn;
     }
 

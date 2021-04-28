@@ -16,7 +16,7 @@ const CardWrapper = styled.div`
   }
 
   &:hover > * div:last-of-type {
-    color: darkgray;
+    color: black;
     transition: all 500ms;
 
   }
@@ -54,7 +54,7 @@ const ContentWrapper = styled.div`
 
 
 const Card = ({data, cardService}: { data: ICard, cardService: CardService }) => {
-    const [toggle, setToggle] = useState(false)
+    const [toggle, setToggle] = useState((data.value === ""))
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
     useEffect(() => {
@@ -78,12 +78,6 @@ const Card = ({data, cardService}: { data: ICard, cardService: CardService }) =>
         cardService.updateCard(data);
     }
 
-    const handleDragStart = (event: any) => event.dataTransfer.setData("card_info", JSON.stringify(data));
-
-    const handleDrop = () => {
-        throw new Error("Function not implemented");
-    }
-
     const handleKeyDown = (event: any) => {
         if (event.key === 'Enter' || event.key === 'Escape') {
             handleCompletion();
@@ -91,9 +85,9 @@ const Card = ({data, cardService}: { data: ICard, cardService: CardService }) =>
     }
 
     return (
-        <CardWrapper onDoubleClick={() => setToggle(true)} onDragOver={event => event.stopPropagation()} draggable={true} onDragStart={handleDragStart} onDrop={handleDrop}>
+        <CardWrapper onDoubleClick={() => setToggle(true)}>
             {(toggle) ?
-                (<TextArea autoFocus ref={textAreaRef} defaultValue={data.value}
+                (<TextArea autoFocus={true} ref={textAreaRef} defaultValue={data.value}
                            onChange={changeTextAreaHeight}
                            onKeyDown={handleKeyDown}
                            onBlur={handleCompletion}

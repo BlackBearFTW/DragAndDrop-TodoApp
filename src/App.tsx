@@ -1,16 +1,23 @@
+import {useEffect, useState} from "react";
 import './App.css';
+
+/* Services */
+import CardService from "./services/CardService";
+import BoardService from "./services/BoardService";
+import ListService from "./services/ListService";
+
+/* Interfaces */
+import IBoard from "./interfaces/IBoard"
+import IList from "./interfaces/IList";
+import ICard from "./interfaces/ICard";
+
+/* Components */
 import Board from "./components/Board";
 import List from "./components/List";
 import Card from "./components/Card";
 import AddList from "./components/AddList";
-import {useEffect, useState} from "react";
-import IBoard from "./interfaces/IBoard"
-import CardService from "./services/CardService";
-import BoardService from "./services/BoardService";
-import ListService from "./services/ListService";
-import IList from "./interfaces/IList";
-import ICard from "./interfaces/ICard";
 
+/* Service variables */
 let boardService: BoardService;
 let listService: ListService;
 let cardService: CardService;
@@ -21,9 +28,9 @@ function App() {
     const [cardsState, setCardsState] = useState<ICard[]>([]);
 
     useEffect(() => {
-        boardService = new BoardService(boardState, setBoardState);
-        listService = new ListService(listsState, setListsState);
-        cardService = new CardService(cardsState, setCardsState);
+        boardService = new BoardService(setBoardState);
+        listService = new ListService(setListsState);
+        cardService = new CardService(setCardsState);
     }, [boardState, cardsState, listsState]);
 
 
@@ -42,10 +49,10 @@ function App() {
         localStorage.setItem("cardsState", JSON.stringify(cardsState));
     }, [boardState, listsState, cardsState]);
 
+
     return (
         <div className="App">
             <Board name={boardState!.name} boardService={boardService}>
-
                 {listsState!.map((list) => (
                     // Generate List
                     <List key={list.id} data={list} cardService={cardService} listService={listService}>
@@ -58,7 +65,6 @@ function App() {
 
                     </List>
                 ))}
-
                 <AddList listService={listService}/>
             </Board>
         </div>

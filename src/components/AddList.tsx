@@ -15,8 +15,6 @@ const Button = styled.button`
   }
 `;
 
-
-
 function AddList({listService}: {listService: ListService}) {
     return (
            <Button onClick={() => listService.addList()}>Add List +</Button>
