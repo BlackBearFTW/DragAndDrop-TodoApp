@@ -16,6 +16,14 @@ class BoardService {
             return newState;
         });
     }
+
+    public changeColor(value: string) {
+        this.stateFunction((state: any) => {
+            const newState = ObjectUtil.deepCopy(state);
+            newState.bg_color = value;
+            return newState;
+        })
+    }
 }
 
 export default BoardService;

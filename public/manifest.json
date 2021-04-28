@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "DND TodoApp",
+  "name": "Simple Drag and Drop Todo App",
   "icons": [
     {
       "src": "favicon.ico",

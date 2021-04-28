@@ -53,6 +53,9 @@ const CardWrapper = styled.div`
 const Header = styled.h4`
   padding: 10px;
   margin: 0;
+  cursor: pointer;
+  color: black;
+
 
   &:hover > * div:last-of-type {
     color: black;
@@ -80,6 +83,8 @@ const Button = styled.button`
   border: none;
   background: lightgray;
   padding: 15px;
+  cursor: pointer;
+  border-radius: 0 0 3px 3px;
 `;
 
 const ContentWrapper = styled.div`

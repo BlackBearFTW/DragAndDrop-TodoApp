@@ -9,6 +9,7 @@ const Button = styled.button`
   flex: none;
   align-self: flex-start;
   padding: 15px;
+  cursor: pointer;
   
   * ~ & {
     margin-left: 15px;

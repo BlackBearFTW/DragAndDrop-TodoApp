@@ -11,6 +11,7 @@ const CardWrapper = styled.div`
   padding: 10px;
   border-radius: 3px;
   overflow-wrap: break-word;
+  color: black;
 
   & ~ & {
     margin-top: 5px;
@@ -49,6 +50,7 @@ const ContentWrapper = styled.div`
     align-items: center;
     padding: 0 5px 0 15px;
     color: white;
+    cursor: pointer;
   }
 
 `;

@@ -17,6 +17,7 @@ import List from "./components/List";
 import Card from "./components/Card";
 import AddList from "./components/AddList";
 import {DragDropContext, DropResult} from "react-beautiful-dnd";
+import ObjectUtil from "./utils/ObjectUtil";
 
 /* Service variables */
 let boardService: BoardService;
@@ -24,7 +25,7 @@ let listService: ListService;
 let cardService: CardService;
 
 function App() {
-    const [boardState, setBoardState] = useState<IBoard>({name: "Board name"});
+    const [boardState, setBoardState] = useState<IBoard>({name: "Board name", bg_color: "#282828"});
     const [listsState, setListsState] = useState<IList[]>([]);
     const [cardsState, setCardsState] = useState<ICard[]>([]);
 
@@ -42,6 +43,9 @@ function App() {
         if (board) setBoardState(JSON.parse(board));
         if (lists) setListsState(JSON.parse(lists));
         if (cards) setCardsState(JSON.parse(cards));
+
+        // weird issue, can't use buttons when localStorage has no data. So fixed by reloading.
+        if (!board) window.location.reload();
     }, [])
 
     useEffect(() => {
@@ -51,12 +55,27 @@ function App() {
     }, [boardState, listsState, cardsState]);
 
     const onDragEnd = (result: DropResult) => {
+        const {draggableId, source, destination} = result;
 
+        if (!destination) return;
+        if (destination.index === source.index && destination.droppableId === source.droppableId) return;
+
+        setCardsState((state: any) => {
+            const newState = ObjectUtil.deepCopy(state);
+            let card = newState.find((item: ICard) => item.id === draggableId)!;
+
+            card.list_id = destination.droppableId;
+
+            newState.splice(source.index, 1);
+            newState.splice(destination.index, 0, card);
+
+            return newState;
+        });
     }
 
     return (
         <div className="App">
-            <Board name={boardState!.name} boardService={boardService}>
+            <Board data={boardState} boardService={boardService}>
             <DragDropContext onDragEnd={onDragEnd}>
                 {listsState!.map((list) => (
                     // Generate List
