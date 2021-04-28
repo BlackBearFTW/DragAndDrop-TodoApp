@@ -67,6 +67,10 @@ const Board = ({data, boardService, children}: { data: IBoard, boardService: Boa
     const [toggle, setToggle] = useState(false)
     const inputRef = useRef<HTMLInputElement>(null);
 
+    const getColorByBgColor = (bgColor: string) => {
+        return (parseInt(bgColor.replace('#', ''), 16) > 0xffffff / 2) ? '#000' : '#fff';
+    }
+
     const handleCompletion = () => {
         if (inputRef.current!.value.trim() === "") return;
         boardService.changeName(inputRef.current!.value);
@@ -80,7 +84,7 @@ const Board = ({data, boardService, children}: { data: IBoard, boardService: Boa
     }
 
     return (
-        <BoardWrapper style={{background: data.bg_color, color: "#ffffff"}} >
+        <BoardWrapper style={{background: data.bg_color, color: getColorByBgColor(data.bg_color)}} >
             <Header>
                 {(toggle) ? (<HeaderInput type="text" ref={inputRef} defaultValue={data.name}
                                           onBlur={handleCompletion}
