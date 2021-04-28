@@ -18,8 +18,7 @@ class CardService {
             const card: ICard = {
                 id: uuid(),
                 list_id: listID,
-                value: "",
-                completed: false
+                value: ""
             };
 
             newState.push(card);
