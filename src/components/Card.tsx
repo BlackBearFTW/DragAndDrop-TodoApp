@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import {useEffect, useRef, useState} from "react";
-import {BiTrash} from "react-icons/bi";
+import {BiPencil, BiTrash} from "react-icons/bi";
 import CardService from "../services/CardService";
 import ICard from "../interfaces/ICard";
 import {Draggable} from "react-beautiful-dnd";
@@ -12,6 +12,7 @@ const CardWrapper = styled.div`
   border-radius: 3px;
   overflow-wrap: break-word;
   color: black;
+  box-shadow: 0 1px 5px 0 #787878FF;
 
   & ~ & {
     margin-top: 5px;
@@ -46,12 +47,12 @@ const ContentWrapper = styled.div`
   display: flex;
   justify-content: space-between;
 
-  & > *:last-of-type {
+  & > *:last-child {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 0 5px 0 15px;
     color: white;
+    padding: 0 5px 0 15px;
     cursor: pointer;
   }
 
@@ -64,7 +65,7 @@ const Card = ({data, cardService, index}: { data: ICard, cardService: CardServic
 
     useEffect(() => {
         if (!toggle) return;
-        changeTextAreaHeight();
+        //changeTextAreaHeight();
     }, [toggle]);
 
     const changeTextAreaHeight = () => {
@@ -93,20 +94,22 @@ const Card = ({data, cardService, index}: { data: ICard, cardService: CardServic
         <Draggable draggableId={data.id} index={index}>
             {provided => (
                 <CardWrapper
-                    onDoubleClick={() => setToggle(true)}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                     ref={provided.innerRef}
                 >
                     {(toggle) ?
-                        (<TextArea autoFocus={true} ref={textAreaRef} defaultValue={data.value}
-                                   onChange={changeTextAreaHeight}
-                                   onKeyDown={handleKeyDown}
-                                   onBlur={handleCompletion}
-                            />
+                        ( <ContentWrapper>
+                                <TextArea autoFocus={true} ref={textAreaRef} defaultValue={data.value}
+                                          onChange={changeTextAreaHeight}
+                                          onKeyDown={handleKeyDown}
+                                          
+                                />
+                                <div onClick={() => cardService.deleteCard(data)}><BiTrash/></div>
+                            </ContentWrapper>
                         ) : <ContentWrapper>
                             <div>{data.value}</div>
-                            <div onClick={() => cardService.deleteCard(data)}><BiTrash/></div>
+                            <div onClick={() => setToggle(true)}><BiPencil/></div>
                         </ContentWrapper>}
                 </CardWrapper>
             )}

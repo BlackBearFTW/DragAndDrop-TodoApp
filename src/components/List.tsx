@@ -55,13 +55,23 @@ const Header = styled.h4`
   margin: 0;
   cursor: pointer;
   color: black;
-
-
-  &:hover > * div:last-of-type {
+  
+  & > div {
+    
+    & > div:first-child:hover {
+      opacity: 0.8;
+    }
+    
+    & > div:last-child:hover {
+      opacity: 0.8;
+    }
+  }
+  
+  &:hover > * div:last-child {
     color: black;
     transition: all 500ms;
     opacity: 1;
-  }
+  
 `;
 
 const HeaderInput = styled.input`
@@ -87,6 +97,10 @@ const Button = styled.button`
   padding: 15px;
   cursor: pointer;
   border-radius: 0 0 3px 3px;
+
+  &:hover {
+    opacity: 0.8;
+  }
 `;
 
 const ContentWrapper = styled.div`

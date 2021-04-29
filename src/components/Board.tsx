@@ -18,6 +18,10 @@ const Header = styled.div`
     margin: 0;
     padding: 15px;
     cursor: pointer;
+    
+    &:hover {
+      opacity: 0.8;
+    }
   }
   
   & > input[type="color"] {
