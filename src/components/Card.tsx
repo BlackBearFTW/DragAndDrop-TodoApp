@@ -65,7 +65,7 @@ const Card = ({data, cardService, index}: { data: ICard, cardService: CardServic
 
     useEffect(() => {
         if (!toggle) return;
-        //changeTextAreaHeight();
+        changeTextAreaHeight();
     }, [toggle]);
 
     const changeTextAreaHeight = () => {
@@ -101,9 +101,9 @@ const Card = ({data, cardService, index}: { data: ICard, cardService: CardServic
                     {(toggle) ?
                         ( <ContentWrapper>
                                 <TextArea autoFocus={true} ref={textAreaRef} defaultValue={data.value}
-                                          onChange={changeTextAreaHeight}
                                           onKeyDown={handleKeyDown}
-                                          
+                                          onChange={changeTextAreaHeight}
+                                          onBlur={handleCompletion}
                                 />
                                 <div onClick={() => cardService.deleteCard(data)}><BiTrash/></div>
                             </ContentWrapper>
