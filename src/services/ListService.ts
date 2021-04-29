@@ -11,11 +11,11 @@ class ListService {
         this.stateFunction = fn;
     }
 
-    public addList() {
+    public addList(name: string) {
         this.stateFunction((state: any) => {
             return [...ObjectUtil.deepCopy(state), {
                 id: uuid(),
-                name: "List name"
+                name: name
                 } as IList];
         });
     }
